@@ -1,5 +1,6 @@
 package org.example.structure.graph;
 
+import org.example.structure.interfaces.ColorType;
 import org.example.structure.interfaces.Igraph;
 import org.example.structure.narytree.NaryTree;
 
@@ -32,6 +33,19 @@ public class Graph <V extends Comparable<V>> implements Igraph<V> {
 
     @Override
     public ArrayList<NaryTree<V>> dfs(V from) {
+        for (Vertex<V> v: vertexes){
+            v.setColor(ColorType.WHITE);
+            v.setFather(null);
+        }
+        for (Vertex<V> v: vertexes){
+
+        }
+
+
+
+
+
+
         return null;
     }
 
