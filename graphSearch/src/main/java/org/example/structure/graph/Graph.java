@@ -18,12 +18,20 @@ public class Graph <V extends Comparable<V>> implements Igraph<V> {
 
     @Override
     public boolean insertVertex(V valueVertex) {
-        return false;
+        getVertexes().add(new Vertex<>(valueVertex));
+        return true;
     }
 
     @Override
     public boolean insertEdge(V from, V to) {
-        return false;
+        if (getVertexes().isEmpty()) return false;
+
+        Vertex fromVertex = searchVertex(from);
+        Vertex toVertex = searchVertex(to);
+
+        fromVertex.getAdjacency().add(toVertex);
+        if (!isDirected) toVertex.getAdjacency().add(fromVertex);
+        return true;
     }
 
     @Override
@@ -81,4 +89,5 @@ public class Graph <V extends Comparable<V>> implements Igraph<V> {
     public void setVertexes(ArrayList<Vertex<V>> vertexes) {
         this.vertexes = vertexes;
     }
+
 }

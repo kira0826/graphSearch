@@ -7,12 +7,13 @@ import java.util.ArrayList;
 public class Vertex <V extends Comparable<V>> {
 
     private Vertex<V> father;
-    private ArrayList<V> adjacency;
+    private ArrayList<Vertex<V>> adjacency;
     private V value;
     private Integer distance;
     private ColorType color;
 
-    public Vertex() {
+    public Vertex(V value) {
+        this.value = value;
         adjacency = new ArrayList<>();
     }
 
@@ -48,11 +49,11 @@ public class Vertex <V extends Comparable<V>> {
         this.father = father;
     }
 
-    public ArrayList<V> getAdjacency() {
+    public ArrayList<Vertex<V>> getAdjacency() {
         return adjacency;
     }
 
-    public void setAdjacency(ArrayList<V> adjacency) {
+    public void setAdjacency(ArrayList<Vertex<V>> adjacency) {
         this.adjacency = adjacency;
     }
 }
