@@ -12,7 +12,7 @@ public interface Igraph <V extends Comparable<V>>{
 
     NaryTree<V> bfs(V from);
     ArrayList<NaryTree<V>> dfs(V from);
-    NaryTree<V> dfsVisit(Vertex<V> from);
+    void dfsVisit(Vertex<V> from, NaryTree<V> tree);
     Vertex<V> searchVertex(V values);
 
 }

@@ -45,21 +45,31 @@ public class Graph <V extends Comparable<V>> implements Igraph<V> {
             v.setColor(ColorType.WHITE);
             v.setFather(null);
         }
-        for (Vertex<V> v: vertexes){
 
+        ArrayList<NaryTree<V>> forest = new ArrayList<>();
+
+        for (Vertex<V> v: vertexes){
+            if (v.getColor().equals(ColorType.WHITE)){
+                NaryTree<V> tree = new NaryTree<>();
+                dfsVisit(v, tree);
+                forest.add(tree);
+            }
         }
 
-
-
-
-
-
-        return null;
+        return forest;
     }
 
     @Override
-    public NaryTree<V> dfsVisit(Vertex<V> from) {
-        return null;
+    public void dfsVisit(Vertex<V> from, NaryTree<V> tree) {
+        from.setColor(ColorType.GRAY);
+        tree.insertNode(from.getValue(), from.getFather().getValue());
+        for (Vertex<V> v: from.getAdjacency()) {
+            if (v.getColor().equals(ColorType.WHITE)){
+                v.setFather(from);
+                dfsVisit(v, tree);
+            }
+        }
+        from.setColor(ColorType.BLACK);
     }
 
     @Override
