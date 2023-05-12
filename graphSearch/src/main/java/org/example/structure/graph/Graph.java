@@ -65,6 +65,7 @@ public class Graph <V> implements Igraph<V> {
             for (Vertex vertex : temporalFather.getAdjacency()
                  ) {
                 if (vertex.getColor().equals(ColorType.WHITE)){
+
                     vertex.setColor(ColorType.GRAY);
                     vertex.setDistance( temporalFather.getDistance() +1);
                     vertex.setFather(temporalFather);
