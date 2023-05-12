@@ -4,7 +4,7 @@ import org.example.structure.interfaces.ColorType;
 
 import java.util.ArrayList;
 
-public class Vertex <V> {
+public class Vertex <V extends Comparable<V>> {
 
     private Vertex<V> father;
     private ArrayList<V> adjacency;

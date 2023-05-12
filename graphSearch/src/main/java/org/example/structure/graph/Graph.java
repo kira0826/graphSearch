@@ -5,10 +5,10 @@ import org.example.structure.narytree.NaryTree;
 
 import java.util.ArrayList;
 
-public class Graph <V> implements Igraph<V> {
+public class Graph <V extends Comparable<V>> implements Igraph<V> {
 
     private boolean isDirected;
-    private ArrayList<V> vertexes;
+    private ArrayList<Vertex<V>> vertexes;
     public Graph(boolean isDirected) {
         this.isDirected = isDirected;
     }
@@ -42,6 +42,13 @@ public class Graph <V> implements Igraph<V> {
 
     @Override
     public Vertex<V> searchVertex(V values) {
+        if (getVertexes().isEmpty()) return null;
+        else {
+            for (Vertex<V> vertex: getVertexes()
+                 ) {
+                if (vertex.getValue().compareTo(values) == 0) return vertex;
+            }
+        }
         return null;
     }
 
@@ -53,11 +60,11 @@ public class Graph <V> implements Igraph<V> {
         isDirected = directed;
     }
 
-    public ArrayList<V> getVertexes() {
+    public ArrayList<Vertex<V>> getVertexes() {
         return vertexes;
     }
 
-    public void setVertexes(ArrayList<V> vertexes) {
+    public void setVertexes(ArrayList<Vertex<V>> vertexes) {
         this.vertexes = vertexes;
     }
 }
