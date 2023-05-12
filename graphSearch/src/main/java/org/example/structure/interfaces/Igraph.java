@@ -5,7 +5,7 @@ import org.example.structure.narytree.NaryTree;
 
 import java.util.ArrayList;
 
-public interface Igraph <V extends Comparable<V>>{
+public interface Igraph <V>{
 
     boolean insertVertex(V valueVertex);
     boolean insertEdge(V from, V to);
