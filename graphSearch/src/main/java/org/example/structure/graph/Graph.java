@@ -5,8 +5,10 @@ import org.example.structure.interfaces.Igraph;
 import org.example.structure.narytree.NaryTree;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
-public class Graph <V extends Comparable<V>> implements Igraph<V> {
+public class Graph <V> implements Igraph<V> {
 
     private boolean isDirected;
     private ArrayList<Vertex<V>> vertexes;
@@ -26,7 +28,7 @@ public class Graph <V extends Comparable<V>> implements Igraph<V> {
     public boolean insertEdge(V from, V to) {
         if (getVertexes().isEmpty()) return false;
 
-        Vertex fromVertex = searchVertex(from);
+        Vertex fromVertex = searchVertex(from); // Luego verficar si los valores no son nullos.
         Vertex toVertex = searchVertex(to);
 
         fromVertex.getAdjacency().add(toVertex);
@@ -36,7 +38,44 @@ public class Graph <V extends Comparable<V>> implements Igraph<V> {
 
     @Override
     public NaryTree<V> bfs(V from) {
-        return null;
+
+        Vertex fromVertex  = searchVertex(from);
+        if (getVertexes().isEmpty()) return null;
+        
+        // Asignar valores por defecto
+        for (Vertex vertex : getVertexes()
+             ) {
+            vertex.setColor(ColorType.WHITE);
+            vertex.setFather(null);
+            vertex.setDistance(Integer.MAX_VALUE);
+        }
+        fromVertex.setColor(ColorType.GRAY);
+        fromVertex.setDistance(0);
+
+        Queue<Vertex<V>> queue = new LinkedList();
+        queue.add(fromVertex);
+
+        NaryTree<V> naryTree = new NaryTree<>();
+        naryTree.insertNode((V) fromVertex.getValue(), (V) fromVertex.getFather().getValue());
+
+        while (!queue.isEmpty()){
+
+            Vertex<V> temporalFather = queue.poll();
+
+            for (Vertex vertex : temporalFather.getAdjacency()
+                 ) {
+                if (vertex.getColor().equals(ColorType.WHITE)){
+                    vertex.setColor(ColorType.GRAY);
+                    vertex.setDistance( temporalFather.getDistance() +1);
+                    vertex.setFather(temporalFather);
+                    naryTree.insertNode((V) vertex,(V) vertex.getFather() );
+                    queue.add(vertex);
+                }
+            }
+            temporalFather.setColor(ColorType.BLACK);
+        }
+
+        return naryTree;
     }
 
     @Override
@@ -56,7 +95,7 @@ public class Graph <V extends Comparable<V>> implements Igraph<V> {
         else {
             for (Vertex<V> vertex: getVertexes()
                  ) {
-                if (vertex.getValue().compareTo(values) == 0) return vertex;
+                if (vertex.getValue().equals(values)) return vertex;
             }
         }
         return null;
