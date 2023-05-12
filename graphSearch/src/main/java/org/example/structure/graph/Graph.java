@@ -80,12 +80,35 @@ public class Graph <V> implements Igraph<V> {
 
     @Override
     public ArrayList<NaryTree<V>> dfs(V from) {
-        return null;
+        for (Vertex<V> v: vertexes){
+            v.setColor(ColorType.WHITE);
+            v.setFather(null);
+        }
+
+        ArrayList<NaryTree<V>> forest = new ArrayList<>();
+
+        for (Vertex<V> v: vertexes){
+            if (v.getColor().equals(ColorType.WHITE)){
+                NaryTree<V> tree = new NaryTree<>();
+                dfsVisit(v, tree);
+                forest.add(tree);
+            }
+        }
+
+        return forest;
     }
 
     @Override
     public void dfsVisit(Vertex<V> from, NaryTree<V> tree) {
-
+        from.setColor(ColorType.GRAY);
+        tree.insertNode(from.getValue(), from.getFather().getValue());
+        for (Vertex<V> v: from.getAdjacency()) {
+            if (v.getColor().equals(ColorType.WHITE)){
+                v.setFather(from);
+                dfsVisit(v, tree);
+            }
+        }
+        from.setColor(ColorType.BLACK);
     }
 
 
