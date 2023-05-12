@@ -13,11 +13,9 @@ public class Graph <V> implements Igraph<V> {
     private boolean isDirected;
     private ArrayList<Vertex<V>> vertexes;
     public Graph(boolean isDirected) {
+        this.vertexes = new ArrayList<>();
         this.isDirected = isDirected;
     }
-    public Graph() {
-    }
-
     @Override
     public boolean insertVertex(V valueVertex) {
         getVertexes().add(new Vertex<>(valueVertex));
@@ -30,6 +28,8 @@ public class Graph <V> implements Igraph<V> {
 
         Vertex fromVertex = searchVertex(from); // Luego verficar si los valores no son nullos.
         Vertex toVertex = searchVertex(to);
+
+        if (fromVertex == null || toVertex  == null) return false;
 
         fromVertex.getAdjacency().add(toVertex);
         if (!isDirected) toVertex.getAdjacency().add(fromVertex);
