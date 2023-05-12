@@ -56,7 +56,7 @@ public class Graph <V> implements Igraph<V> {
         queue.add(fromVertex);
 
         NaryTree<V> naryTree = new NaryTree<>();
-        naryTree.insertNode((V) fromVertex.getValue(), (V) fromVertex.getFather().getValue());
+        naryTree.insertNode((V) fromVertex.getValue(), null);
 
         while (!queue.isEmpty()){
 
@@ -69,7 +69,7 @@ public class Graph <V> implements Igraph<V> {
                     vertex.setColor(ColorType.GRAY);
                     vertex.setDistance( temporalFather.getDistance() +1);
                     vertex.setFather(temporalFather);
-                    naryTree.insertNode((V) vertex,(V) vertex.getFather() );
+                    naryTree.insertNode((V) vertex.getValue(),(V) vertex.getFather().getValue() );
                     queue.add(vertex);
                 }
             }
