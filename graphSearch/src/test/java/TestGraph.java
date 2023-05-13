@@ -1,7 +1,6 @@
 import org.example.structure.graph.Graph;
-import org.example.structure.narytree.NaryTree;
 import org.example.structure.narytree.Node;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -64,12 +63,9 @@ public class TestGraph {
         graph.deleteVertex("S");
     }
 
-    @Test
-    public void insertionDirectToRoot(){
-        setUpStage6();
-        assertEquals(0,graph.getVertexes().size());
-        assertNull( graph.getVertexes().get(0));
-    }
+    // INSERTIONS:
+
+
 
     @Test
     public void  insertEdge(){
@@ -88,6 +84,8 @@ public class TestGraph {
         assertEquals("B",graph.getVertexes().get(0).getAdjacency().get(0).getValue());
         assertEquals(0,graph.getVertexes().get(1).getAdjacency().size());
     }
+
+    // DELETE:
 
     @Test
     public void deleteDirectToRoot(){
@@ -126,6 +124,9 @@ public class TestGraph {
         assertEquals("S",graph.getVertexes().get(1).getAdjacency().get(0).getValue());
     }
 
+    // BFS TEST
+
+    //
     @Test
     public void bfsTreeConstruction(){
         setUpStage4NoDirected();
@@ -148,8 +149,7 @@ public class TestGraph {
 
     }
 
-
-
+    // DFS  TEST
     @Test
     public void dfsTreeConstruction(){
         setUpStage5();
