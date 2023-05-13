@@ -101,7 +101,7 @@ public class Graph <V> implements Igraph<V> {
     }
 
     @Override
-    public ArrayList<NaryTree<V>> dfs(V from) {
+    public ArrayList<NaryTree<V>> dfs() {
         for (Vertex<V> v: vertexes){
             v.setColor(ColorType.WHITE);
             v.setFather(null);

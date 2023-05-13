@@ -16,7 +16,7 @@ public interface Igraph <V>{
 
 
     NaryTree<V> bfs(V from);
-    ArrayList<NaryTree<V>> dfs(V from);
+    ArrayList<NaryTree<V>> dfs();
     void dfsVisit(Vertex<V> from, NaryTree<V> tree);
     Vertex<V> searchVertex(V values);
 
