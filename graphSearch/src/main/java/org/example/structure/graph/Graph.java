@@ -81,6 +81,19 @@ public class Graph <V> implements Igraph<V> {
 
     @Override
     public ArrayList<NaryTree<V>> dfs(V from) {
+        for (Vertex<V> v: vertexes){
+            v.setColor(ColorType.WHITE);
+            v.setFather(null);
+        }
+        for (Vertex<V> v: vertexes){
+
+        }
+
+
+
+
+
+
         return null;
     }
 
