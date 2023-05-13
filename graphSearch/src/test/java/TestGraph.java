@@ -102,4 +102,31 @@ public class TestGraph {
         graph.bfs("S").postOrder().forEach(node-> System.out.println(node.getElement()));
 
     }
+
+
+
+    @Test
+    public void dfsTreeConstruction(){
+        setUpStage5();
+        graph.dfs("S").get(0).postOrder().forEach(node-> System.out.println(node.getElement()));
+
+    }
+
+    @Test
+    public void dfsTreeConstructionLevels(){
+        setUpStage4NoDirected();
+        graph.dfs("S").get(0).postOrder().forEach(node-> System.out.println(node.getElement()));
+    }
+
+    @Test
+    public void dfsBasicTreeConstructionPreOrder(){
+        setUpStage5();
+        graph.dfs("S").get(0).preOrder().forEach(node-> System.out.println(node.getElement()));
+    }
+
+    @Test
+    public void dfsBigTreeConstructionPreOrder(){
+        setUpStage4NoDirected();
+        graph.dfs("S").get(0).preOrder().forEach(node-> System.out.println(node.getElement()));
+    }
 }

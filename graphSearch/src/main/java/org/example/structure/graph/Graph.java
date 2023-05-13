@@ -37,6 +37,27 @@ public class Graph <V> implements Igraph<V> {
     }
 
     @Override
+    public boolean deleteVertex(V valueVertex) {
+        getVertexes().remove(valueVertex);
+        return false;
+    }
+
+    @Override
+    public boolean deleteEdge(V from, V to) {
+        if (getVertexes().isEmpty()) return false;
+
+        Vertex<V> fromVertex = searchVertex(from); // Luego verficar si los valores no son nullos.
+        Vertex<V> toVertex = searchVertex(to);
+
+        if (fromVertex == null || toVertex  == null) return false;
+
+        fromVertex.getAdjacency().remove(toVertex);
+        if (!isDirected) toVertex.getAdjacency().remove(fromVertex);
+        return true;
+
+    }
+
+    @Override
     public NaryTree<V> bfs(V from) {
 
         Vertex fromVertex  = searchVertex(from);
@@ -102,7 +123,9 @@ public class Graph <V> implements Igraph<V> {
     @Override
     public void dfsVisit(Vertex<V> from, NaryTree<V> tree) {
         from.setColor(ColorType.GRAY);
-        tree.insertNode(from.getValue(), from.getFather().getValue());
+        V temp = null;
+        if(from.getFather() != null) { temp = from.getFather().getValue(); }
+        tree.insertNode(from.getValue(), temp);
         for (Vertex<V> v: from.getAdjacency()) {
             if (v.getColor().equals(ColorType.WHITE)){
                 v.setFather(from);
