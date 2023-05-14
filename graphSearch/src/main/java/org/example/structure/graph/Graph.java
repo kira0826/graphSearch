@@ -38,8 +38,21 @@ public class Graph <V> implements Igraph<V> {
 
     @Override
     public boolean deleteVertex(V valueVertex) {
-        getVertexes().remove(valueVertex);
-        return false;
+        for (int i = 0; i < getVertexes().size(); i++) {
+            if (getVertexes().get(i).getValue().equals(valueVertex)){
+                getVertexes().remove(i);
+            }
+        }
+
+        for (Vertex<V> vertex : getVertexes()
+        ) {
+            for (int i = 0; i < vertex.getAdjacency().size(); i++) {
+                if (vertex.getAdjacency().get(i).getValue().equals(valueVertex)){
+                    vertex.getAdjacency().remove(i);
+                }
+            }
+        }
+        return true;
     }
 
     @Override

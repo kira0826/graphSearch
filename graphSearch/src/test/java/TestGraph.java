@@ -1,9 +1,9 @@
 import org.example.structure.graph.Graph;
 import org.example.structure.narytree.NaryTree;
 import org.example.structure.narytree.Node;
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
 
 public class TestGraph {
 
@@ -68,7 +68,6 @@ public class TestGraph {
     public void insertionDirectToRoot(){
         setUpStage6();
         assertEquals(0,graph.getVertexes().size());
-        assertNull( graph.getVertexes().get(0));
     }
 
     @Test
