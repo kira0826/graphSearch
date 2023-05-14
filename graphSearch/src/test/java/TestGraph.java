@@ -64,6 +64,20 @@ public class TestGraph {
         graph.deleteVertex("S");
     }
 
+    public void setUpStage7Directed(){
+        graph = new Graph<>(true);
+        graph.insertVertex("V");
+        graph.insertVertex("R");
+        graph.insertVertex("S");
+        graph.insertVertex("H");
+        graph.insertVertex("L");
+        //Insertions:
+        graph.insertEdge("V","R");
+        graph.insertEdge("S","R");
+        graph.insertEdge("H","L");
+
+    }
+
     @Test
     public void insertionDirectToRoot(){
         setUpStage6();
@@ -188,5 +202,72 @@ public class TestGraph {
             test += n.getElement() + " ";
         }
         assertEquals("V R S W T X U Y " , test);
+    }
+
+    @Test
+    public void dfsForestConstructionPreOrder1(){
+        setUpStage7Directed();
+        String test1 = "";
+        for (Node n:graph.dfs().get(0).preOrder()) {
+            test1 += n.getElement() + " ";
+        }
+
+        assertEquals(3, graph.dfs().size());
+        assertEquals(2, graph.dfs().get(0).weight());
+        assertEquals("V R " , test1);
+    }
+    @Test
+    public void dfsForestConstructionPreOrder2(){
+        setUpStage7Directed();
+        String test2 = "";
+        for (Node n:graph.dfs().get(1).preOrder()) {
+            test2 += n.getElement() + " ";
+        }
+        assertEquals(3, graph.dfs().size());
+        assertEquals(1, graph.dfs().get(1).weight());
+        assertEquals("S " , test2);
+    }
+    @Test
+    public void dfsForestConstructionPreOrder3(){
+        setUpStage7Directed();
+        String test3 = "";
+        for (Node n:graph.dfs().get(2).preOrder()) {
+            test3 += n.getElement() + " ";
+        }
+        assertEquals(3, graph.dfs().size());
+        assertEquals(2, graph.dfs().get(2).weight());
+        assertEquals("H L " , test3);
+    }
+
+    @Test
+    public void bfsForestConstructionPreOrder1(){
+        setUpStage7Directed();
+        String test1 = "";
+        for (Node n: graph.bfs("V").preOrder()) {
+            test1 += n.getElement() + " ";
+        }
+        assertEquals(2, graph.bfs("V").weight());
+        assertEquals("V R " , test1);
+    }
+    @Test
+    public void bfsForestConstructionPreOrder2(){
+        setUpStage7Directed();
+        String test2 = "";
+        for (Node n:graph.bfs("R").preOrder()) {
+            test2 += n.getElement() + " ";
+        }
+        assertEquals(1, graph.bfs("R").weight());
+        assertEquals("R " , test2);
+    }
+
+    @Test
+    public void bfsForestConstructionPreOrder3(){
+        setUpStage7Directed();
+        String test2 = "";
+        for (Node n:graph.bfs("H").preOrder()) {
+            test2 += n.getElement() + " ";
+        }
+        assertEquals(2, graph.bfs("H").weight());
+        assertEquals("H L " , test2);
     }
 }
