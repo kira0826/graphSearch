@@ -45,7 +45,7 @@ public class Graph <V> implements Igraph<V> {
         }
 
         for (Vertex<V> vertex : getVertexes()
-             ) {
+        ) {
             for (int i = 0; i < vertex.getAdjacency().size(); i++) {
                 if (vertex.getAdjacency().get(i).getValue().equals(valueVertex)){
                     vertex.getAdjacency().remove(i);
