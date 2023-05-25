@@ -4,22 +4,54 @@ import org.example.structure.interfaces.ColorType;
 import org.example.structure.interfaces.Igraph;
 import org.example.structure.narytree.NaryTree;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class Graph <V> implements Igraph<V> {
 
     private boolean isDirected;
     private ArrayList<Vertex<V>> vertexes;
-    public Graph(boolean isDirected) {
+
+    private Hashtable<V, Hashtable<V,Integer>> weightedMatrix ;
+
+    private boolean isWeighted;
+    public Graph(boolean isDirected, boolean isWeighted) {
         this.vertexes = new ArrayList<>();
         this.isDirected = isDirected;
+        if (isWeighted){
+            this.isWeighted = true;
+            this.weightedMatrix = new Hashtable<>();
+        }
     }
     @Override
     public boolean insertVertex(V valueVertex) {
         getVertexes().add(new Vertex<>(valueVertex));
+        if (isWeighted){
+            getWeightedMatrix().put(valueVertex, new Hashtable<>()); // Add new vertex as a new row of weighted matrix.
+            for (Vertex vertex: getVertexes()
+            ) {
+                getWeightedMatrix().get(valueVertex).put((V)vertex.getValue(),Integer.MAX_VALUE);
+            }
+            for (Hashtable<V,Integer> hashTable: getWeightedMatrix().values()
+                 ) {
+                hashTable.put(valueVertex, Integer.MAX_VALUE);
+            }
+
+            getWeightedMatrix().get(valueVertex).put(valueVertex,0);
+        }
         return true;
+    }
+
+    public void dijkstra(){
+        Hashtable<V, Integer> distance=  new Hashtable<>();
+
+
+
+    }
+    public Integer searchWeightOfVertex(V from,  V to){
+        Integer weight = -1;
+        if (getWeightedMatrix().containsKey(from) && getWeightedMatrix().containsKey(to)) weight = getWeightedMatrix().get(from).get(to);
+
+        return weight;
     }
 
     @Override
@@ -30,9 +62,27 @@ public class Graph <V> implements Igraph<V> {
         Vertex toVertex = searchVertex(to);
 
         if (fromVertex == null || toVertex  == null) return false;
-
         fromVertex.getAdjacency().add(toVertex);
         if (!isDirected) toVertex.getAdjacency().add(fromVertex);
+
+        return true;
+    }
+
+    public boolean insertWeightedEdge(V from, V to, Integer weight) {
+        if (getVertexes().isEmpty()) return false;
+
+        Vertex fromVertex = searchVertex(from); // Luego verficar si los valores no son nullos.
+        Vertex toVertex = searchVertex(to);
+
+        if (fromVertex == null || toVertex  == null) return false;
+
+        fromVertex.getAdjacency().add(toVertex);
+        getWeightedMatrix().get(from).put(to,weight);
+        if (!isDirected) {
+            toVertex.getAdjacency().add(fromVertex);
+            getWeightedMatrix().get(to).put(from,weight);
+        }
+
         return true;
     }
 
@@ -52,6 +102,13 @@ public class Graph <V> implements Igraph<V> {
                 }
             }
         }
+        if (isWeighted){
+            getWeightedMatrix().remove(valueVertex);
+            for (Hashtable<V,Integer> hash: getWeightedMatrix().values()
+            ) {
+                hash.remove(valueVertex);
+            }
+        }
         return true;
     }
 
@@ -65,9 +122,14 @@ public class Graph <V> implements Igraph<V> {
         if (fromVertex == null || toVertex  == null) return false;
 
         fromVertex.getAdjacency().remove(toVertex);
-        if (!isDirected) toVertex.getAdjacency().remove(fromVertex);
-        return true;
 
+        if (!isDirected) toVertex.getAdjacency().remove(fromVertex);
+
+        if (isWeighted){
+            getWeightedMatrix().get(from).put(to, Integer.MAX_VALUE);
+            if (!isDirected) getWeightedMatrix().get(to).put(from,Integer.MAX_VALUE);
+        }
+        return true;
     }
 
     @Override
@@ -177,4 +239,19 @@ public class Graph <V> implements Igraph<V> {
         this.vertexes = vertexes;
     }
 
+    public boolean isWeighted() {
+        return isWeighted;
+    }
+
+    public Hashtable<V, Hashtable<V, Integer>> getWeightedMatrix() {
+        return weightedMatrix;
+    }
+
+    public void setWeightedMatrix(Hashtable<V, Hashtable<V, Integer>> weightedMatrix) {
+        this.weightedMatrix = weightedMatrix;
+    }
+
+    public void setWeighted(boolean weighted) {
+        isWeighted = weighted;
+    }
 }

@@ -11,22 +11,22 @@ public class TestGraph {
 
 
     public void  setUpStage1(){
-        graph = new Graph<>(false);
+        graph = new Graph<>(false, false);
         graph.insertVertex("S");
     }
 
     public void setUpStage2NoDirected(){
-        graph = new Graph<>(false);
+        graph = new Graph<>(false, false);
         graph.insertVertex("A");
         graph.insertVertex("B");
     }
     public void setUpStage3Directed(){
-        graph = new Graph<>(true);
+        graph = new Graph<>(true, false);
         graph.insertVertex("A");
         graph.insertVertex("B");
     }
     public void setUpStage4NoDirected(){
-        graph = new Graph<>(false);
+        graph = new Graph<>(false, false);
         graph.insertVertex("V");
         graph.insertVertex("R");
         graph.insertVertex("S");
@@ -49,7 +49,7 @@ public class TestGraph {
     }
 
     public void setUpStage5(){
-        graph = new Graph<>(false);
+        graph = new Graph<>(false, false);
         graph.insertVertex("S");
         graph.insertVertex("R");
         graph.insertVertex("W");
@@ -59,13 +59,13 @@ public class TestGraph {
     }
 
     public void  setUpStage6(){
-        graph = new Graph<>(false);
+        graph = new Graph<>(false, false);
         graph.insertVertex("S");
         graph.deleteVertex("S");
     }
 
     public void setUpStage7Directed(){
-        graph = new Graph<>(true);
+        graph = new Graph<>(true, false);
         graph.insertVertex("V");
         graph.insertVertex("R");
         graph.insertVertex("S");
@@ -76,6 +76,52 @@ public class TestGraph {
         graph.insertEdge("S","R");
         graph.insertEdge("H","L");
 
+    }
+
+    // Weight Graph set up
+
+    public void setUpStage8DirecetedAndWeight(){
+        graph = new Graph<>(true, true);
+        graph.insertVertex("A");
+        graph.insertVertex("B");
+        graph.insertVertex("C");
+
+    }
+
+    public void setUpStage9DirecetedAndWeight(){
+        graph = new Graph<>(true, true);
+        graph.insertVertex("A");
+        graph.insertVertex("B");
+        graph.insertVertex("C");
+        graph.insertWeightedEdge("A","B",10);
+        graph.insertWeightedEdge("C","A",15);
+
+    }
+    //Weight Graph testing
+
+    @Test
+    public void directedAndWeightWithNotEdges(){
+        setUpStage9DirecetedAndWeight();
+        assertEquals(10, graph.getWeightedMatrix().get("A").get("B"));
+        assertEquals(15, graph.getWeightedMatrix().get("C").get("A"));
+        assertEquals(Integer.MAX_VALUE, graph.getWeightedMatrix().get("A").get("C"));
+        assertEquals(Integer.MAX_VALUE, graph.getWeightedMatrix().get("C").get("B"));
+        assertEquals(0, graph.getWeightedMatrix().get("A").get("A"));
+        assertEquals(0, graph.getWeightedMatrix().get("C").get("C"));
+        assertEquals(0, graph.getWeightedMatrix().get("B").get("B"));
+    }
+
+    @Test
+    public void directedAndWeightWithEdges(){
+        setUpStage8DirecetedAndWeight();
+        assertEquals(10, graph.getWeightedMatrix().get("A").get("B"));
+        assertEquals(15, graph.getWeightedMatrix().get("C").get("A"));
+        assertEquals(Integer.MAX_VALUE, graph.getWeightedMatrix().get("C").get("B"));
+        assertEquals(Integer.MAX_VALUE, graph.getWeightedMatrix().get("B").get("A"));
+        assertEquals(Integer.MAX_VALUE, graph.getWeightedMatrix().get("A").get("C"));
+        assertEquals(0, graph.getWeightedMatrix().get("A").get("A"));
+        assertEquals(0, graph.getWeightedMatrix().get("C").get("C"));
+        assertEquals(0, graph.getWeightedMatrix().get("B").get("B"));
     }
 
     @Test
