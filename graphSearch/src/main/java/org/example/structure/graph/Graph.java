@@ -43,7 +43,13 @@ public class Graph <V> implements Igraph<V> {
 
     public void dijkstra(){
         Hashtable<V, Integer> distance=  new Hashtable<>();
+        Hashtable<V, Vertex<V>> prev =  new Hashtable<>();
 
+
+        for (Vertex<V> vertex: getVertexes()
+             ) {
+            vertex.setColor(ColorType.WHITE);
+        }
 
 
     }
