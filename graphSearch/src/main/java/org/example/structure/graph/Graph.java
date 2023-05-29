@@ -1,12 +1,13 @@
 package org.example.structure.graph;
 
 import org.example.structure.interfaces.ColorType;
+import org.example.structure.interfaces.IPriorityQueue;
 import org.example.structure.interfaces.Igraph;
 import org.example.structure.narytree.NaryTree;
 
 import java.util.*;
 
-public class Graph <V> implements Igraph<V> {
+public class Graph <V extends Comparable<V> > implements Igraph<V> {
 
     private boolean isDirected;
     private ArrayList<Vertex<V>> vertexes;
@@ -41,17 +42,42 @@ public class Graph <V> implements Igraph<V> {
         return true;
     }
 
-    public void dijkstra(){
-        Hashtable<V, Integer> distance=  new Hashtable<>();
-        Hashtable<V, Vertex<V>> prev =  new Hashtable<>();
+    public Map<?,?>[] dijkstra(V source){
+        Vertex<V> vertexSource = searchVertex(source);
 
+        Hashtable<V, Integer> distance=  new Hashtable<>();
+        HashMap<V, V> prev =  new HashMap<>();
+        IPriorityQueue priorityQueue = new Heap();
 
         for (Vertex<V> vertex: getVertexes()
              ) {
-            vertex.setColor(ColorType.WHITE);
+            distance.put(vertex.getValue(), Integer.MAX_VALUE);
+            prev.put(vertex.getValue(), null);
+
+            if (vertexSource.getValue().equals(vertex.getValue())) distance.put(vertexSource.getValue(), 0);
+
+            priorityQueue.insert(distance.get(vertex.getValue()), vertex.getValue());
         }
 
+            while(!priorityQueue.isEmpty()){
+                Vertex<V> vertexToCheck =   searchVertex((V) priorityQueue.heapExtractMin());
+                for (Vertex<V> adjacency: vertexToCheck.getAdjacency()
+                     ) {
+                    int temporal = distance.get(vertexToCheck.getValue()) +
+                            getWeightedMatrix().get(vertexToCheck.getValue()).get(adjacency.getValue());
 
+                    if (temporal <  distance.get(adjacency.getValue())){
+
+                        distance.put(adjacency.getValue(), temporal);
+                        prev.put(adjacency.getValue(),vertexToCheck.getValue());
+                        priorityQueue.decreasePriority(adjacency.getValue(), temporal);
+                }
+            }
+        }
+
+            Map [] maps = {distance,prev};
+
+            return maps;
     }
     public Integer searchWeightOfVertex(V from,  V to){
         Integer weight = -1;

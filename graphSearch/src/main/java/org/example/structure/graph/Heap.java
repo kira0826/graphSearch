@@ -6,26 +6,26 @@ import java.util.ArrayList;
 
 public class Heap<K extends Comparable,V> implements IPriorityQueue<K,V> {
 
-    private ArrayList<HeapNode<K,V>> list;
+    private ArrayList<HeapNode<K, V>> list;
 
     private int heapSize;
 
     // Heap methods
 
-    public void minHeapify(int from){
-        int left  = getLeft(from);
-        int right  = getRigth(from);
+    public void minHeapify(int from) {
+        int left = getLeft(from);
+        int right = getRigth(from);
         int smallest = from;
 
-        if (left < heapSize){
-            if (  list.get(left).getKey().compareTo(list.get(from).getKey()) < 0 )smallest = left;
+        if (left < heapSize) {
+            if (list.get(left).getKey().compareTo(list.get(from).getKey()) < 0) smallest = left;
         }
 
-        if (right < heapSize){
-            if (  list.get(right).getKey().compareTo(list.get(smallest).getKey()) < 0 ) smallest = right;
+        if (right < heapSize) {
+            if (list.get(right).getKey().compareTo(list.get(smallest).getKey()) < 0) smallest = right;
         }
 
-        if (smallest != from){
+        if (smallest != from) {
             HeapNode temporal = list.get(from);
             list.set(from, list.get(smallest));
             list.set(smallest, temporal);
@@ -33,59 +33,62 @@ public class Heap<K extends Comparable,V> implements IPriorityQueue<K,V> {
         }
     }
 
-    public void buildHeap(){
+    public void buildHeap() {
         this.heapSize = list.size();
-        for (int i = (list.size() /2) -1; i >=0 ; i--) {
+        for (int i = (list.size() / 2) - 1; i >= 0; i--) {
             minHeapify(i);
         }
     }
+
     /**
      * It´s worth to say when the heapsort is applied,  the list attribute is not a heap anymore, thus,
      * the heapSize is changed to 0.
      */
-    public void heapSort(){
+    public void heapSort() {
         buildHeap();
-        for (int i = list.size()-1; i >= 1 ; i--) {
+        for (int i = list.size() - 1; i >= 1; i--) {
             HeapNode temporal = list.get(0);
-            list.set(0,list.get(i));
+            list.set(0, list.get(i));
             list.set(i, temporal);
-            heapSize-=1;
+            heapSize -= 1;
             minHeapify(0);
         }
 
     }
 
     public int getFather(int position) {
-        position+=1;
+        position += 1;
         if (position == 0) return 0;
-        else return  position/2 -1;
+        else return position / 2 - 1;
     }
 
     public int getLeft(int position) {
-        position+=1;
-        return position*2 - 1 ;
+        position += 1;
+        return position * 2 - 1;
     }
 
     public int getRigth(int position) {
-        position+=1;
-        return position*2;
+        position += 1;
+        return position * 2;
     }
 
     //Priority Queue methods
 
 
     @Override
-    public K heapExtractMin() {
-        if (heapSize < 0 ) return null;
-        K max = list.get(0).getKey();
-        list.set(0, list.get(heapSize-1));
-        heapSize --;
+    public V heapExtractMin() {
+        if (heapSize < 0) return null;
+        V max = list.get(0).getValue();
+        list.set(0, list.get(heapSize - 1));
+        list.remove(heapSize - 1);
+        heapSize--;
         minHeapify(0);
         return max;
     }
 
     /**
      * It returns the highest key as long as the buildHeap or heapSort methods have been applied.
+     *
      * @return
      */
     @Override
@@ -94,8 +97,22 @@ public class Heap<K extends Comparable,V> implements IPriorityQueue<K,V> {
     }
 
     @Override
-    public String increaseKey(int position, K key) {
-        if (key.compareTo(list.get(position).getKey()) < 0) {
+    public boolean isEmpty() {
+        return getList().isEmpty();
+    }
+
+    @Override
+    public String decreasePriority(V value, K key) {
+        Integer position = null ;
+
+        for (int i = 0; i < getList().size(); i++) {
+            if (getList().get(i).getValue().equals(value)) {
+                position =i;
+                break;
+            }
+        }
+
+        if (key.compareTo(list.get(position).getKey()) > 0) {
             return "Not incrementing priority";
         }
         list.get(position).setKey(key);
@@ -107,7 +124,7 @@ public class Heap<K extends Comparable,V> implements IPriorityQueue<K,V> {
             list.set(position, temporal);
             position = getFather(position);
         }
-        return "Increment done";
+        return "Decrease done";
     }
 
     /**

@@ -2,6 +2,10 @@ import org.example.structure.graph.Graph;
 import org.example.structure.narytree.NaryTree;
 import org.example.structure.narytree.Node;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
+import java.util.Stack;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -97,6 +101,58 @@ public class TestGraph {
         graph.insertWeightedEdge("C","A",15);
 
     }
+
+    public void setUpWeightedGraphWithCycle(){
+        graph = new Graph<>(false, true);
+        graph.insertVertex("A");
+        graph.insertVertex("B");
+        graph.insertVertex("C");
+        graph.insertVertex("D");
+        graph.insertVertex("E");
+        graph.insertVertex("Z");
+        graph.insertWeightedEdge("A","B",4);
+        graph.insertWeightedEdge("A","C",2);
+        graph.insertWeightedEdge("B","D",5);
+        graph.insertWeightedEdge("B","C",1);
+        graph.insertWeightedEdge("C","D",8 );
+        graph.insertWeightedEdge("C","E",10);
+        graph.insertWeightedEdge("E","D",2);
+        graph.insertWeightedEdge("E","Z",3);
+        graph.insertWeightedEdge("D","Z",6);
+
+    }
+    // Dijkstra testing
+
+    @Test
+    public void dijkstraForGraphWithCycle(){
+        setUpWeightedGraphWithCycle();
+        Map distance = graph.dijkstra("A")[0];
+
+        Map prev = graph.dijkstra("A")[1];
+        assertEquals(13,distance.get("Z"));
+        assertEquals(0,distance.get("A"));
+        assertEquals(3,distance.get("B"));
+        assertEquals(2,distance.get("C"));
+        assertEquals(8,distance.get("D"));
+        assertEquals(10,distance.get("E"));
+
+        String chain = "";
+        String init = "Z";
+        Stack stack = new Stack<>();
+        stack.add(init);
+
+        while(prev.get(init) != null){
+
+            stack.add(prev.get(init));
+            init = (String) prev.get(init);
+        }
+        while(!stack.isEmpty()){
+            chain+= stack.pop() + " ";
+        }
+        assertEquals("A C B D E Z", chain.trim());
+    }
+
+
     //Weight Graph testing
 
     @Test
@@ -113,7 +169,7 @@ public class TestGraph {
 
     @Test
     public void directedAndWeightWithEdges(){
-        setUpStage8DirecetedAndWeight();
+        setUpStage9DirecetedAndWeight();
         assertEquals(10, graph.getWeightedMatrix().get("A").get("B"));
         assertEquals(15, graph.getWeightedMatrix().get("C").get("A"));
         assertEquals(Integer.MAX_VALUE, graph.getWeightedMatrix().get("C").get("B"));
