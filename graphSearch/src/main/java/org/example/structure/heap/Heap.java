@@ -1,4 +1,4 @@
-package org.example.structure.graph;
+package org.example.structure.heap;
 
 import org.example.structure.interfaces.IPriorityQueue;
 

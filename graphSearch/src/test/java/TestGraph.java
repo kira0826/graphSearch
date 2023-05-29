@@ -3,6 +3,8 @@ import org.example.structure.narytree.NaryTree;
 import org.example.structure.narytree.Node;
 import org.junit.jupiter.api.Test;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
@@ -241,6 +243,52 @@ public class TestGraph {
         assertEquals("S",graph.getVertexes().get(1).getAdjacency().get(0).getValue());
     }
 
+
+    //BFS
+
+    @Test
+    public void bfsSearchForOneNode(){
+        setUpStage4NoDirected();
+        List result = graph.bfsForOneNode("S", "U");
+        String chain  = "";
+        for (int i = result.size()-1 ; i > -1; i--) {
+            chain += result.get(i) + " ";
+        }
+        assertEquals("S W T U", chain.trim());
+    }
+    @Test
+    public void bfsSearchForOneNode2(){
+        setUpStage4NoDirected();
+        List result = graph.bfsForOneNode("R", "V");
+        String chain  = "";
+        for (int i = result.size()-1 ; i > -1; i--) {
+            chain += result.get(i) + " ";
+        }
+        assertEquals("R V", chain.trim());
+    }
+
+    @Test
+    public void bfsSearchForOneNode3(){
+        setUpStage4NoDirected();
+        List result = graph.bfsForOneNode("Y", "V");
+        String chain  = "";
+        for (int i = result.size()-1 ; i > -1; i--) {
+            chain += result.get(i) + " ";
+        }
+        assertEquals("Y X W S R V", chain.trim());
+    }
+
+    @Test
+    public void bfsSearchForOneNode4(){
+        setUpStage4NoDirected();
+        List result = graph.bfsForOneNode("W", "U");
+        String chain  = "";
+        for (int i = result.size()-1 ; i > -1; i--) {
+            chain += result.get(i) + " ";
+        }
+        assertEquals("W T U", chain.trim());
+    }
+
     @Test
     public void bfsTreeConstruction(){
         setUpStage4NoDirected();
@@ -263,6 +311,67 @@ public class TestGraph {
 
     }
 
+
+    @Test
+    public void dfsForOneNodeSearch(){
+        setUpStage5();
+        List<String> list = graph.dfsForOneNode("S","R");
+        String chain = "";
+        for (String a: list
+             ) {
+            chain += a +" ";
+        }
+        assertEquals("S R", chain.trim());
+
+    }
+    @Test
+    public void dfsForOneNodeSearch1(){
+        setUpStage4NoDirected();
+        List<String> list = graph.dfsForOneNode("V","U");
+        String chain = "";
+        for (String a: list
+        ) {
+            chain += a +" ";
+        }
+        assertEquals("V R S W T X U", chain.trim());
+
+    }
+
+    @Test
+    public void dfsForOneNodeSearch2(){
+        setUpStage4NoDirected();
+        List<String> list = graph.dfsForOneNode("Y","X");
+        String chain = "";
+        for (String a: list
+        ) {
+            chain += a +" ";
+        }
+        assertEquals("X U Y", chain.trim());
+
+    }
+    @Test
+    public void dfsForOneNodeSearch3(){
+        setUpStage4NoDirected();
+        List<String> list = graph.dfsForOneNode("V","W");
+        String chain = "";
+        for (String a: list
+        ) {
+            chain += a +" ";
+        }
+        assertEquals("V R S W", chain.trim());
+    }
+
+    @Test
+    public void dfsOneNodeSearch4(){
+        setUpStage4NoDirected();
+        List<String> list = graph.dfsForOneNode("T","Y");
+        String chain = "";
+        for (String a: list
+        ) {
+            chain += a +" ";
+        }
+        assertEquals("T X U Y", chain.trim());
+    }
 
 
     @Test

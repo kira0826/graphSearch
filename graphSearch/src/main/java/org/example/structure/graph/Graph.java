@@ -1,10 +1,13 @@
 package org.example.structure.graph;
 
+import org.example.structure.heap.Heap;
 import org.example.structure.interfaces.ColorType;
 import org.example.structure.interfaces.IPriorityQueue;
 import org.example.structure.interfaces.Igraph;
 import org.example.structure.narytree.NaryTree;
 
+import javax.management.QueryEval;
+import javax.xml.xpath.XPathEvaluationResult;
 import java.util.*;
 
 public class Graph <V extends Comparable<V> > implements Igraph<V> {
@@ -41,6 +44,7 @@ public class Graph <V extends Comparable<V> > implements Igraph<V> {
         }
         return true;
     }
+
 
     public Map<?,?>[] dijkstra(V source){
         Vertex<V> vertexSource = searchVertex(source);
@@ -79,6 +83,10 @@ public class Graph <V extends Comparable<V> > implements Igraph<V> {
 
             return maps;
     }
+
+
+
+
     public Integer searchWeightOfVertex(V from,  V to){
         Integer weight = -1;
         if (getWeightedMatrix().containsKey(from) && getWeightedMatrix().containsKey(to)) weight = getWeightedMatrix().get(from).get(to);
@@ -164,6 +172,8 @@ public class Graph <V extends Comparable<V> > implements Igraph<V> {
         return true;
     }
 
+    // BFS Methods
+
     @Override
     public NaryTree<V> bfs(V from) {
 
@@ -207,6 +217,58 @@ public class Graph <V extends Comparable<V> > implements Igraph<V> {
         return naryTree;
     }
 
+
+    public List<V> bfsForOneNode(V from, V to ){
+
+
+        Vertex fromVertex  = searchVertex(from);
+        Vertex toVertex  = searchVertex(to);
+
+
+        if (getVertexes().isEmpty()) return null;
+
+        // Asignar valores por defecto
+        for (Vertex vertex : getVertexes()
+        ) {
+            vertex.setColor(ColorType.WHITE);
+            vertex.setFather(null);
+            vertex.setDistance(Integer.MAX_VALUE);
+        }
+        fromVertex.setColor(ColorType.GRAY);
+        fromVertex.setDistance(0);
+
+        Queue<Vertex<V>> queue = new LinkedList();
+        queue.add(fromVertex);
+
+        while (!queue.isEmpty() && toVertex.getColor().equals(ColorType.WHITE)){
+
+            Vertex<V> temporalFather = queue.poll();
+
+            for (Vertex vertex : temporalFather.getAdjacency()
+            ) {
+                if (vertex.getColor().equals(ColorType.WHITE) ){
+
+                    vertex.setColor(ColorType.GRAY);
+                    vertex.setDistance( temporalFather.getDistance() +1);
+                    vertex.setFather(temporalFather);
+                    queue.add(vertex);
+                }
+            }
+            temporalFather.setColor(ColorType.BLACK);
+        }
+
+        Stack <V> path = new Stack<>();
+        Vertex<V> tem  = toVertex;
+
+        while(tem != null){
+            path.add((V) tem.getValue());
+            tem = tem.getFather();
+        }
+        return path;
+    }
+
+    //DFS Search
+
     @Override
     public ArrayList<NaryTree<V>> dfs() {
         for (Vertex<V> v: vertexes){
@@ -240,6 +302,80 @@ public class Graph <V extends Comparable<V> > implements Igraph<V> {
             }
         }
         from.setColor(ColorType.BLACK);
+    }
+
+
+    public List<V> dfsForOneNode(V from, V to) {
+        if (dfs().size() >1) return null;
+        NaryTree naryTree = dfs().get(0);
+        Stack fromPath = new Stack<>();
+        fromPath = pathToCeil(searchVertex(from), fromPath);
+
+        Stack toPath = new Stack<>();
+        toPath = pathToCeil(searchVertex(to), toPath);
+
+        Queue result = new LinkedList();
+
+
+
+        for (int i = 0; i <fromPath.size(); i++) {
+            if (toPath.contains(fromPath.get(i))){
+                if (fromPath.get(i).equals(from) || fromPath.get(i).equals(to)){
+                    boolean isFound = false;
+                    if (toPath.size() > fromPath.size()){
+                        int j = toPath.size()-1;
+                        while(!toPath.isEmpty()) {
+                            if ((toPath.get(j).equals(from) || toPath.get(j).equals(to))) isFound =true;
+                            if (isFound) result.add(toPath.pop());
+                            else toPath.pop();
+                            j--;
+                        }
+                    }else {
+                        int j = fromPath.size()-1;
+                        while(!fromPath.isEmpty()) {
+                            if ((fromPath.get(j).equals(from) || fromPath.get(j).equals(to))) isFound =true;
+                            if (isFound) result.add(fromPath.pop());
+                            else fromPath.pop();
+                            j--;
+                        }
+                    }
+                } else {
+                    V value = (V) fromPath.get(i);
+                    Stack temporal = new Stack<>();
+
+                    for (int j = 0; j < fromPath.size() ; j++) {
+                        if (value.equals(fromPath.get(j))) break;
+                        temporal.add(fromPath.get(j));
+                    }
+
+                    temporal.add(value);
+                    while(!temporal.isEmpty()) {
+                        result.add(temporal.pop());
+                    }
+
+
+                    boolean isFound = false;
+                    int j  = toPath.size()-1;
+                    while (!toPath.isEmpty()){
+                        if (toPath.get(j).equals(value)) isFound = true;
+                        if (isFound) result.add(toPath.pop());
+                        else toPath.pop();
+                        j--;
+                    }
+                }
+                {
+
+                }
+            }
+        }
+
+        return (List<V>) result;
+
+    }
+    public Stack<V> pathToCeil (Vertex<V> current, Stack<V> stack){
+        if (current == null) return  stack;
+        stack.add(current.getValue());
+        return pathToCeil(current.getFather(),stack);
     }
 
 

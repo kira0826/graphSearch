@@ -1,4 +1,4 @@
-package org.example.structure.graph;
+package org.example.structure.heap;
 
 public class HeapNode <K extends Comparable,V> {
 
