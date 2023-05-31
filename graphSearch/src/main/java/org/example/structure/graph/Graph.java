@@ -306,6 +306,7 @@ public class Graph <V extends Comparable<V> > implements Igraph<V> {
 
 
     public List<V> dfsForOneNode(V from, V to) {
+
         if (dfs().size() >1) return null;
         NaryTree naryTree = dfs().get(0);
         Stack fromPath = new Stack<>();
@@ -315,8 +316,6 @@ public class Graph <V extends Comparable<V> > implements Igraph<V> {
         toPath = pathToCeil(searchVertex(to), toPath);
 
         Queue result = new LinkedList();
-
-
 
         for (int i = 0; i <fromPath.size(); i++) {
             if (toPath.contains(fromPath.get(i))){
